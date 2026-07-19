@@ -84,6 +84,65 @@ def classify(item: dict, response: str) -> str:
     return "value absent from table"
 
 
+ENCODINGS = {"c1_markdown": "Markdown", "c3_csv": "CSV",
+             "c4_html": "HTML", "c5_markdown_cot": "Md+CoT"}
+
+
+def cross_encoding_section(*models: str) -> list[str]:
+    """Does the column-indexing error survive a change of serialization?
+
+    The header labels are identical in every encoding, so if the failure really
+    comes from reading a label's number as a position, changing pipes to commas
+    or to <td> tags should not remove it.
+    """
+    by_model: dict[str, dict[str, dict[str, dict]]] = defaultdict(
+        lambda: defaultdict(dict))
+    for path in sorted(glob.glob(str(ROOT / "results" / "run_*.json"))):
+        try:
+            data = json.loads(Path(path).read_text(encoding="utf-8"))
+        except (json.JSONDecodeError, OSError):
+            continue
+        if not isinstance(data, list):
+            continue
+        for r in data:
+            if r.get("model") in models and r.get("condition") in ENCODINGS \
+                    and r.get("id") in ITEMS:
+                by_model[r["model"]][r["condition"]][r["id"]] = r
+
+    out = ["", "## Does the error survive a change of encoding?", "",
+           "Header labels are identical in every encoding, so the label-as-position "
+           "confusion should persist if that is really the mechanism.", "",
+           "| Model | Encoding | Wrong | Correct row, wrong column | On label position |",
+           "|---|---|---|---|---|"]
+    for model in models:
+        for cond, label in ENCODINGS.items():
+            recs = by_model.get(model, {}).get(cond, {})
+            if not recs:
+                continue
+            wrong = [r for r in recs.values() if not score_record(r)]
+            row_ok = on_label = 0
+            for rec in wrong:
+                item = ITEMS[rec["id"]]
+                parsed = parse_table(item["context_markdown"], item["row"])
+                got = extract_amounts(rec["response"])
+                if not parsed or not got:
+                    continue
+                _, cells = parsed
+                values = {i: next(iter(extract_amounts(c)))
+                          for i, c in enumerate(cells) if extract_amounts(c)}
+                gold_idx = next((i for i, v in values.items()
+                                 if v == int(item["gold_value"])), None)
+                answered = [i for i, v in values.items() if v in got]
+                if gold_idx is None or not answered:
+                    continue
+                row_ok += 1
+                m = re.search(r"(\d+)", item["column"])
+                if m and int(m.group(1)) == answered[0]:
+                    on_label += 1
+            out.append(f"| {model} | {label} | {len(wrong)} | {row_ok} | {on_label} |")
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--model", default="llama-3.1-8b-instant")
@@ -182,6 +241,8 @@ def main() -> None:
         out.append(f"- **{doc.upper()}**: {len(amounts)} numeric cells, "
                    f"{repeated} ({repeated / len(amounts):.0%}) share their value "
                    f"with another cell in the same table")
+
+    out += cross_encoding_section(args.model, 'llama-3.3-70b-versatile')
 
     text = "\n".join(out) + "\n"
     (ROOT / "results" / "summary_errors.md").write_text(text, encoding="utf-8")
