@@ -1,0 +1,50 @@
+%%{init: {"flowchart": {"wrappingWidth": 210, "nodeSpacing": 30, "rankSpacing": 40}}}%%
+flowchart TB
+    classDef step fill:#ffffff,stroke:#5b6b7f,stroke-width:1px,color:#1a2432
+    classDef key fill:#f4f7fc,stroke:#3b6db5,stroke-width:1.4px,color:#12233d
+
+    subgraph S1["1 &nbsp; SETUP"]
+        direction LR
+        A1["Two tariff decrees<br/>60 cell-lookup questions"]
+        A2["Retrieval disabled:<br/>one gold context per question"]
+        A3["Seven representations:<br/>encoding, transformation, prompting"]
+        A4["Ten checkpoints:<br/>five families, two scales"]
+        A1 --> A2 --> A3 --> A4
+    end
+
+    subgraph S2["2 &nbsp; DIAGNOSIS"]
+        direction LR
+        B1["Compare encodings<br/>markdown, CSV, HTML, CoT"]
+        B2["Measure the scale gap<br/>on the best encoding"]
+        B3["Dissect every wrong answer:<br/>which cell did it come from?"]
+        B1 --> B2 --> B3
+    end
+
+    subgraph S3["3 &nbsp; CAUSAL TEST"]
+        direction LR
+        C1["Two candidate causes are<br/>confounded in real documents"]
+        C2["2 x 2 controlled design:<br/>label alignment x value repetition"]
+        C3["Cause identified,<br/>rival account rejected"]
+        C1 --> C2 --> C3
+    end
+
+    subgraph S4["4 &nbsp; REMEDY AND LIMITS"]
+        direction LR
+        D1["Per-cell verbalization<br/>and hybrid representation"]
+        D2["Replication across<br/>five model families"]
+        D3["Five stress structures:<br/>headers, aggregation, arithmetic"]
+        D4["Token cost under<br/>verified list prices"]
+        D1 --> D2 --> D3 --> D4
+    end
+
+    A4 --> B1
+    B3 --> C1
+    C3 --> D1
+
+    class A1,A2,A3,A4,B1,B2,C1,D1,D2,D3,D4 step
+    class B3,C2,C3 key
+
+    style S1 fill:#fbfcfd,stroke:#aab4c0,stroke-width:1px
+    style S2 fill:#fbfcfd,stroke:#aab4c0,stroke-width:1px
+    style S3 fill:#fbfcfd,stroke:#aab4c0,stroke-width:1px
+    style S4 fill:#fbfcfd,stroke:#aab4c0,stroke-width:1px

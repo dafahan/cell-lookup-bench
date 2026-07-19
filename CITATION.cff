@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+title: >-
+  cell-lookup-bench: a retrieval-free benchmark for table cell
+  lookup in open-weight language models
+message: >-
+  If you use this benchmark or its results, please cite both the
+  software and the accompanying article.
+type: software
+authors:
+  - given-names: Dafa Farhan
+    family-names: Haqiqi
+    email: dafahanid@gmail.com
+    affiliation: >-
+      Department of Computer Science, Faculty of Mathematics and
+      Natural Sciences, Universitas Lampung
+repository-code: 'https://github.com/dafahan/cell-lookup-bench'
+abstract: >-
+  A retrieval-free benchmark that isolates the reading-side failure
+  of language models on table cell lookup. Each question is paired
+  with a gold context guaranteed to contain the answer, rendered in
+  seven information-equivalent representations, and scored by
+  deterministic exact match without an LLM judge. Includes a 2x2
+  controlled experiment that separates column-label misalignment
+  from value repetition as candidate causes, five synthetic stress
+  structures, and raw responses from ten checkpoints across five
+  open-weight model families.
+keywords:
+  - table question answering
+  - large language models
+  - benchmark
+  - column indexing
+  - table verbalization
+  - reproducibility
+license: MIT
+license-url: 'https://github.com/dafahan/cell-lookup-bench/blob/main/LICENSE'
+version: 1.0.0
+date-released: '2026-07-19'
