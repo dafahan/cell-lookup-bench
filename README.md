@@ -1,5 +1,9 @@
 # cell-lookup-bench
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21440722.svg)](https://doi.org/10.5281/zenodo.21440722)
+[![License: MIT](https://img.shields.io/badge/code-MIT-blue.svg)](LICENSE)
+[![Data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey.svg)](LICENSE-DATA)
+
 A retrieval-free benchmark that isolates **why language models return the wrong cell** when reading tables, and measures what repairs it.
 
 Every question is paired with a *gold context* guaranteed to contain the answer, so retrieval contributes nothing by construction and any error is a reading error. Scoring is **deterministic exact match with no LLM judge**, so every number in the accompanying article can be reproduced from the shipped raw responses without spending a cent on API calls.
@@ -116,6 +120,21 @@ A response must end with a line of the form `JAWABAN: <value>`. Only the span af
 - Prices in `src/score.py` are list prices captured on 19 July 2026 and will drift.
 - The corpus is one document domain, in Indonesian.
 
-## Licence
+## Licence and citation
 
-Code under [MIT](LICENSE). Data and results under [CC BY 4.0](LICENSE-DATA), which also documents the provenance of the source decrees. See [CITATION.cff](CITATION.cff) for how to cite.
+Code under [MIT](LICENSE). Data and results under [CC BY 4.0](LICENSE-DATA), which also documents the provenance of the source decrees.
+
+Archived on Zenodo with a version-independent DOI that always resolves to the latest release:
+
+```bibtex
+@software{haqiqi_cell_lookup_bench,
+  author  = {Haqiqi, Dafa Farhan},
+  title   = {cell-lookup-bench: a retrieval-free benchmark for table
+             cell lookup in open-weight language models},
+  year    = {2026},
+  doi     = {10.5281/zenodo.21440722},
+  url     = {https://doi.org/10.5281/zenodo.21440722}
+}
+```
+
+To cite a specific release instead, use its own DOI from the Zenodo record. See [CITATION.cff](CITATION.cff) for other formats.

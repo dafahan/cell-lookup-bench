@@ -14,6 +14,14 @@ authors:
       Department of Computer Science, Faculty of Mathematics and
       Natural Sciences, Universitas Lampung
 repository-code: 'https://github.com/dafahan/cell-lookup-bench'
+doi: 10.5281/zenodo.21440722
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.21440722
+    description: Concept DOI, always resolves to the latest release
+  - type: doi
+    value: 10.5281/zenodo.21440723
+    description: DOI of release v1.0.0
 abstract: >-
   A retrieval-free benchmark that isolates the reading-side failure
   of language models on table cell lookup. Each question is paired
